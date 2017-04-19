@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D12235E01EA7E5560071351D /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12235DF1EA7E5560071351D /* BaseUIViewController.swift */; };
 		D1A156B31E9FCB6700F2E275 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A156B21E9FCB6700F2E275 /* AppDelegate.swift */; };
 		D1A156B51E9FCB6700F2E275 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A156B41E9FCB6700F2E275 /* MainViewController.swift */; };
 		D1A156B81E9FCB6700F2E275 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D1A156B61E9FCB6700F2E275 /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D12235DF1EA7E5560071351D /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseUIViewController.swift; sourceTree = "<group>"; };
 		D1A156AF1E9FCB6700F2E275 /* TrafficAlert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrafficAlert.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1A156B21E9FCB6700F2E275 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D1A156B41E9FCB6700F2E275 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				D1A156B41E9FCB6700F2E275 /* MainViewController.swift */,
+				D12235DF1EA7E5560071351D /* BaseUIViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D12235E01EA7E5560071351D /* BaseUIViewController.swift in Sources */,
 				D1A888BA1EA194A600322D32 /* MapViewDelegate.swift in Sources */,
 				D1A156B51E9FCB6700F2E275 /* MainViewController.swift in Sources */,
 				D1A156E21EA00DAA00F2E275 /* SearchPlacesDelegate.swift in Sources */,
