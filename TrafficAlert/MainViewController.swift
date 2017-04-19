@@ -20,7 +20,7 @@ protocol HandleMapSearch {
     func plotPolyline(route: MKRoute)
 }
 
-class MainViewController: UIViewController, MKLocalSearchCompleterDelegate, TableRowSelectedDelegate, UITextFieldDelegate{
+class MainViewController: BaseUIViewController, MKLocalSearchCompleterDelegate, TableRowSelectedDelegate, UITextFieldDelegate{
     
     // Outlets
     @IBOutlet weak var mainUIScrollView: UIScrollView!
@@ -33,6 +33,7 @@ class MainViewController: UIViewController, MKLocalSearchCompleterDelegate, Tabl
     @IBOutlet weak var minUITextField: UITextField!
     @IBOutlet weak var phoneNumberUITextField: UITextField!
     @IBOutlet weak var setNotificationUIButton: UIButton!
+    @IBOutlet weak var currentETAUILabel: UILabel!
     @IBOutlet weak var mapContainerUIView: UIView!
     
     // Properties
@@ -90,6 +91,10 @@ class MainViewController: UIViewController, MKLocalSearchCompleterDelegate, Tabl
         // Tap gesture for content view
         let contentTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.scrollViewTapped(sender:)))
         scrollContentView.addGestureRecognizer(contentTapGesture)
+        
+        // UI adjustments
+        currentETAUILabel.isHidden = true
+        setNotificationUIButton.layer.cornerRadius = 5
         
     }
     
@@ -252,12 +257,18 @@ class MainViewController: UIViewController, MKLocalSearchCompleterDelegate, Tabl
             toUITextField.text = searchString
         }
         
+        self.scrollViewTapped(sender: nil)
+        
         // Make a request to mklocalsearch to display pin/directions on map
         let request = MKLocalSearchRequest()
         request.naturalLanguageQuery = searchString
         let search = MKLocalSearch(request: request)
+        
+        // Show spinner
+        self.displayLoadingOverlay(viewToAddOn: scrollContentView, frameToLoadOn: mapContainerUIView.frame)
         search.start { response, _ in
            self.handleSearchRequest(response: response)
+     
         }
         
     }
@@ -282,8 +293,6 @@ extension MainViewController: HandleMapSearch {
             self.dropPinZoomIn(placemark: mapItems[0].placemark)
         }
         
-        
-        self.scrollViewTapped(sender: nil)
     }
     
     func dropPinZoomIn(placemark:MKPlacemark){
@@ -327,7 +336,7 @@ extension MainViewController: HandleMapSearch {
             // 3
             request.transportType = .automobile
             // 4
-            
+            // mkdirections request
             let directions = MKDirections(request: request)
             directions.calculate(completionHandler: ({
                 (response, error) in
@@ -337,15 +346,25 @@ extension MainViewController: HandleMapSearch {
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
                 } else if(response != nil){
+                    // Sort routes ascending order and draw them, this way the lastly drawn route will be on top
                     let sortedRoutes =
-                        response!.routes.sorted(by: {$0.expectedTravelTime <
+                        response!.routes.sorted(by: {$0.expectedTravelTime >
                             $1.expectedTravelTime})
                     self.mapDelegate.routeCount = sortedRoutes.count
                     sortedRoutes.forEach{route in
                         self.plotPolyline(route: route)
                     }
-                    
+                    let hours = Int(sortedRoutes.last!.expectedTravelTime / 3600)
+                    let minutes = Int(sortedRoutes.last!.expectedTravelTime.truncatingRemainder(dividingBy: 3600)  / 60)
+                    var timeString = "Current ETA:"
+                    if(hours != 0){
+                        timeString += " \(hours)hr"
+                    }
+                    timeString += " \(minutes)min"
+                    self.currentETAUILabel.text = timeString
+                    self.currentETAUILabel.isHidden = false
                 }
+                self.hideLoadingOverlay()
             }))
             
         } else {
@@ -353,6 +372,7 @@ extension MainViewController: HandleMapSearch {
             let span = MKCoordinateSpanMake(0.05, 0.05)
             let region = MKCoordinateRegionMake(placemark.coordinate, span)
             mapView.setRegion(region, animated: true)
+            self.hideLoadingOverlay()
         }
     }
     

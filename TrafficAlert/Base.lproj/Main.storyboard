@@ -19,7 +19,7 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="883"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="997"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nIo-kD-XlD">
@@ -40,10 +40,10 @@
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="eV8-Vu-kwK">
-                                <rect key="frame" x="0.0" y="85" width="375" height="798"/>
+                                <rect key="frame" x="0.0" y="85" width="375" height="912"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5N1-07-0IK">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="843"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="914"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="From" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wvq-84-OO8">
                                                 <rect key="frame" x="16" y="8" width="42" height="21"/>
@@ -142,21 +142,28 @@
                                                     <action selector="SetNotifcationButton_TouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GIh-i7-BR2"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Acw-Le-Oaj">
-                                                <rect key="frame" x="16" y="388" width="343" height="72"/>
-                                                <string key="text">*Traffic Alert erases all data after an alert is complete.  It does not sell or rent your data.  It will not send promotional or marketing messages.</string>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current ETA:" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Acw-Le-Oaj">
+                                                <rect key="frame" x="16" y="388" width="343" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="textColor" red="0.045559423575129543" green="0.045559423575129543" blue="0.045559423575129543" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KDI-m9-sdr">
-                                                <rect key="frame" x="0.0" y="468" width="375" height="375"/>
+                                                <rect key="frame" x="0.0" y="414" width="375" height="375"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="KDI-m9-sdr" secondAttribute="height" multiplier="1:1" id="8Oo-0x-r9z"/>
                                                 </constraints>
                                             </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAg-AH-NeC">
+                                                <rect key="frame" x="8" y="812" width="359" height="81.5"/>
+                                                <string key="text">*Traffic Alert erases all data after an alert is complete.  It does not sell or rent your data.  It will not send promotional or marketing messages.</string>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="hAg-AH-NeC" firstAttribute="leading" secondItem="5N1-07-0IK" secondAttribute="leading" constant="8" id="1Xy-Rb-aCQ"/>
                                             <constraint firstItem="Acw-Le-Oaj" firstAttribute="leading" secondItem="5N1-07-0IK" secondAttribute="leading" constant="16" id="1YC-WV-SdL"/>
                                             <constraint firstItem="Acw-Le-Oaj" firstAttribute="top" secondItem="hrq-Zw-vYC" secondAttribute="bottom" constant="8" id="2LJ-8L-tC9"/>
                                             <constraint firstItem="HsO-oz-sxa" firstAttribute="leading" secondItem="5N1-07-0IK" secondAttribute="leading" constant="16" id="2hH-MP-jEp"/>
@@ -166,13 +173,15 @@
                                             <constraint firstItem="9ZW-iy-It6" firstAttribute="top" secondItem="cBo-zy-6vN" secondAttribute="bottom" constant="8" id="7aJ-D3-CDz"/>
                                             <constraint firstItem="UbY-wO-Fif" firstAttribute="top" secondItem="HsO-oz-sxa" secondAttribute="bottom" constant="8" id="91w-tu-G66"/>
                                             <constraint firstItem="9ZW-iy-It6" firstAttribute="leading" secondItem="5N1-07-0IK" secondAttribute="leading" constant="16" id="9sR-S5-4zO"/>
-                                            <constraint firstAttribute="bottom" secondItem="KDI-m9-sdr" secondAttribute="bottom" id="CJ1-Kq-FAl"/>
+                                            <constraint firstAttribute="trailing" secondItem="hAg-AH-NeC" secondAttribute="trailing" constant="8" id="CvX-oC-zm0"/>
                                             <constraint firstItem="Cp4-AC-7p1" firstAttribute="top" secondItem="6Oz-h7-SD7" secondAttribute="bottom" constant="8" id="DQM-nR-QkZ"/>
+                                            <constraint firstAttribute="bottom" secondItem="hAg-AH-NeC" secondAttribute="bottom" constant="20.5" id="GxJ-lb-frr"/>
                                             <constraint firstItem="Cp4-AC-7p1" firstAttribute="width" secondItem="dWR-ag-EVH" secondAttribute="width" id="H1W-7L-Vcj"/>
                                             <constraint firstItem="PfD-0j-Rxo" firstAttribute="leading" secondItem="5N1-07-0IK" secondAttribute="leading" constant="16" id="Hns-vn-85E"/>
                                             <constraint firstAttribute="trailing" secondItem="hrq-Zw-vYC" secondAttribute="trailing" constant="16" id="KTQ-Oq-j9W"/>
                                             <constraint firstItem="dWR-ag-EVH" firstAttribute="leading" secondItem="5N1-07-0IK" secondAttribute="leading" constant="16" id="NCL-Ou-a0u"/>
                                             <constraint firstItem="HsO-oz-sxa" firstAttribute="top" secondItem="PfD-0j-Rxo" secondAttribute="bottom" constant="9" id="NKJ-So-MhW"/>
+                                            <constraint firstItem="hAg-AH-NeC" firstAttribute="top" secondItem="KDI-m9-sdr" secondAttribute="bottom" constant="23" id="RiS-DN-UXE"/>
                                             <constraint firstItem="6Oz-h7-SD7" firstAttribute="centerY" secondItem="9ZW-iy-It6" secondAttribute="centerY" id="SUu-em-vdH"/>
                                             <constraint firstAttribute="trailing" secondItem="cBo-zy-6vN" secondAttribute="trailing" constant="16" id="Tyg-eG-IlY"/>
                                             <constraint firstItem="KDI-m9-sdr" firstAttribute="top" secondItem="Acw-Le-Oaj" secondAttribute="bottom" constant="8" id="Uhn-q2-LFM"/>
@@ -203,7 +212,7 @@
                                 <constraints>
                                     <constraint firstItem="5N1-07-0IK" firstAttribute="top" secondItem="eV8-Vu-kwK" secondAttribute="top" id="1aW-zk-9Nt"/>
                                     <constraint firstItem="5N1-07-0IK" firstAttribute="leading" secondItem="eV8-Vu-kwK" secondAttribute="leading" id="8MC-uq-XqC"/>
-                                    <constraint firstAttribute="bottom" secondItem="5N1-07-0IK" secondAttribute="bottom" constant="87" id="YGj-IT-9a8"/>
+                                    <constraint firstAttribute="bottom" secondItem="5N1-07-0IK" secondAttribute="bottom" id="YGj-IT-9a8"/>
                                     <constraint firstAttribute="trailing" secondItem="5N1-07-0IK" secondAttribute="trailing" id="g0H-YG-Ugf"/>
                                 </constraints>
                             </scrollView>
@@ -221,8 +230,9 @@
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="375" height="883"/>
+                    <size key="freeformSize" width="375" height="997"/>
                     <connections>
+                        <outlet property="currentETAUILabel" destination="Acw-Le-Oaj" id="bZH-rq-vK7"/>
                         <outlet property="fromUITextField" destination="PfD-0j-Rxo" id="8sU-Nm-nWu"/>
                         <outlet property="hourUITextField" destination="dWR-ag-EVH" id="Vlc-zJ-xTh"/>
                         <outlet property="mainUIScrollView" destination="eV8-Vu-kwK" id="uua-vZ-X4M"/>
@@ -246,7 +256,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="138.53073463268368"/>
+            <point key="canvasLocation" x="136.80000000000001" y="138.0809595202399"/>
         </scene>
     </scenes>
 </document>
