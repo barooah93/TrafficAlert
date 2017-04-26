@@ -41,11 +41,12 @@ class MainViewController: BaseUIViewController, MKLocalSearchCompleterDelegate, 
     var mapDelegate: MapViewDelegate!
     var locationManager: CLLocationManager!
     
-    var selectedPin:MKPlacemark? = nil
     var fromMapItem:MKMapItem? = nil
     var toMapItem:MKMapItem? = nil
     var fromAnnotation:MKPointAnnotation! = nil
     var toAnnotation:MKPointAnnotation! = nil
+    
+    var directionsETAInSeconds:Double! = nil
     
     var searchCompleter: MKLocalSearchCompleter!
     
@@ -57,6 +58,9 @@ class MainViewController: BaseUIViewController, MKLocalSearchCompleterDelegate, 
     
     var isFromFieldFocused = false
     var isToFieldFocused = false
+    
+    var oldFromText: String = ""
+    var oldToText: String = ""
     
     // Scroll view properties/gestures
     var panScrollViewGesture: UIPanGestureRecognizer?
@@ -95,6 +99,8 @@ class MainViewController: BaseUIViewController, MKLocalSearchCompleterDelegate, 
         // UI adjustments
         currentETAUILabel.isHidden = true
         setNotificationUIButton.layer.cornerRadius = 5
+        setNotificationUIButton.isEnabled = false
+        setNotificationUIButton.alpha = 0.6
         
     }
     
@@ -171,9 +177,12 @@ class MainViewController: BaseUIViewController, MKLocalSearchCompleterDelegate, 
     
     // Method to handle when textfields are out of focus
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if(textField == fromUITextField || textField == toUITextField){
-            self.scrollViewTapped(sender: nil)
+        if(textField == fromUITextField){
+            fromUITextField.text = oldFromText
+        } else if(textField == toUITextField){
+            toUITextField.text = oldToText
         }
+        self.scrollViewTapped(sender: nil)
     }
 
     // Method to handle text field text changes on screen
@@ -196,7 +205,21 @@ class MainViewController: BaseUIViewController, MKLocalSearchCompleterDelegate, 
                 // Perform completer query
                 searchCompleter.queryFragment = textField.text!
             }
+            
         }
+        
+        // Also check if all textfields have text, in which case activate the notifcation button
+        var activateNotificationButton = true
+        if(fromUITextField.text!.isEmpty
+            || toUITextField.text!.isEmpty
+            || (hourUITextField.text!.isEmpty && minUITextField.text!.isEmpty)
+            || phoneNumberUITextField.text!.isEmpty){
+            activateNotificationButton = false
+        }
+        self.setNotificationUIButton.isEnabled = activateNotificationButton
+        self.setNotificationUIButton.alpha = activateNotificationButton ? 1.0 : 0.6
+        
+        
     }
     
     // Method to handle showing the table for search results when text field is selected
@@ -253,8 +276,10 @@ class MainViewController: BaseUIViewController, MKLocalSearchCompleterDelegate, 
         
         if(isFromFieldFocused){
             fromUITextField.text = searchString
+            oldFromText = searchString
         } else if(isToFieldFocused){
             toUITextField.text = searchString
+            oldToText = searchString
         }
         
         self.scrollViewTapped(sender: nil)
@@ -277,6 +302,57 @@ class MainViewController: BaseUIViewController, MKLocalSearchCompleterDelegate, 
     // Method to handle set notification button click
     @IBAction func SetNotifcationButton_TouchUpInside(_ sender: Any) {
         // Error check parameters before calling api
+        if(fromMapItem == nil || toMapItem == nil){
+            let emptyAddressAlert = UIAlertController(title: "Alert!", message: "Please select a valid 'From' and 'To' location.", preferredStyle: .alert)
+            emptyAddressAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(emptyAddressAlert, animated: true)
+            return
+        }
+        
+        var seconds : Double = 0
+        // Convert threshold time to seconds
+        if let hours = Double(hourUITextField.text!) {
+            seconds += hours * 3600
+        }
+        if let minutes = Double(minUITextField.text!){
+            seconds += minutes * 60
+        }
+        
+        // Check if eta is already below threshold
+        if(seconds > directionsETAInSeconds!){
+            let minTimeAlert = UIAlertController(title: "FYI", message: "The estimated time to your destination is already below your threshold, are you sure you want to continue?", preferredStyle: .alert)
+            minTimeAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {(alert: UIAlertAction!) in
+                self.ContinueToCallApi(seconds: seconds)
+            }))
+                
+            minTimeAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            self.present(minTimeAlert, animated: true)
+        } else {
+            
+            self.ContinueToCallApi(seconds: seconds)
+        }
+        
+        
+    }
+    
+    func ContinueToCallApi(seconds: Double!){
+        // Create request object and call api method
+        let trafficRequest = TrafficAlertRequest()
+        trafficRequest.fromCoordinate = Coordinate("", "")
+        self.CallApi(trafficRequest: trafficRequest)
+    }
+    
+    func CallApi(trafficRequest: TrafficAlertRequest){
+        // Process request
+        var request = URLRequest(url: URL(string:"https://jsonplaceholder.typicode.com/posts/1")!)
+        request.httpMethod = "GET"
+        let session = URLSession.shared
+        session.dataTask(with: request){data, response, err in
+            let jsonData = try? JSONSerialization.jsonObject(with: data!, options: [])
+            if let response = jsonData as? [String:Any]{
+                print(response)
+            }
+        }.resume()
     }
 
 
@@ -354,6 +430,7 @@ extension MainViewController: HandleMapSearch {
                     sortedRoutes.forEach{route in
                         self.plotPolyline(route: route)
                     }
+                    self.directionsETAInSeconds = sortedRoutes.last!.expectedTravelTime
                     let hours = Int(sortedRoutes.last!.expectedTravelTime / 3600)
                     let minutes = Int(sortedRoutes.last!.expectedTravelTime.truncatingRemainder(dividingBy: 3600)  / 60)
                     var timeString = "Current ETA:"
@@ -378,7 +455,7 @@ extension MainViewController: HandleMapSearch {
     
     func plotPolyline(route: MKRoute) {
         // 1
-        mapView.add(route.polyline)
+        mapView.add(route.polyline, level: .aboveRoads)
         // 2
         mapView.setVisibleMapRect(route.polyline.boundingMapRect,
                                       edgePadding: UIEdgeInsetsMake(20.0, 20.0, 20.0, 20.0),
